@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.flowable</groupId>
+  <groupId>org.flowable.ex</groupId>
   <artifactId>flowable-ex</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -13,7 +13,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <java.version>1.8</java.version>
+
     <flowable.version>6.5.0</flowable.version>
     <groovy.version>2.5.8</groovy.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
@@ -26,6 +29,32 @@
       <groupId>org.flowable</groupId>
       <artifactId>flowable-engine</artifactId>
       <version>${flowable.version}</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+      <version>${junit.jupiter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.199</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${hikari.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.14.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -49,7 +78,17 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
+          <version>3.0.0-M4</version>
+          <configuration>
+            <useFile>false</useFile>
+            <includes>
+              <include>**/*Test.java</include>
+              <include>**/*Spec.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
@@ -72,11 +111,28 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <!-- Mandatory plugins for using Spock -->
+        <plugin>
+          <!-- The gmavenplus plugin is used to compile Groovy code. To learn more about this plugin,
+          visit https://github.com/groovy/GMavenPlus/wiki -->
+          <groupId>org.codehaus.gmavenplus</groupId>
+          <artifactId>gmavenplus-plugin</artifactId>
+          <version>1.6</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+                <goal>compileTests</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
 
   <modules>
     <module>flowable-spock</module>
+    <module>flowable-groovy</module>
   </modules>
 </project>

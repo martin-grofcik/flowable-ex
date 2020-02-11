@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  targetNamespace="test">
+
+  <process id="scriptTaskProcess">
+    <startEvent id="theStart" />
+    <sequenceFlow id="flow1" sourceRef="theStart" targetRef="scriptTask" />
+    <scriptTask id="scriptTask" scriptFormat="groovy">
+      <script>
+        execution.newVariable = execution.inputVariable
+      </script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="scriptTask" targetRef="receiveTask" />
+    <receiveTask id="receiveTask"/>
+    <sequenceFlow id="flow3" sourceRef="receiveTask" targetRef="receiveTask" />
+    <endEvent id="theEnd" />
+  </process>
+
+</definitions>

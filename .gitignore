@@ -25,4 +25,5 @@ hs_err_pid*
 *.ipr
 *.iws
 /flowable-spock/target/
+/flowable-groovy/target/
 /.idea/

@@ -12,7 +12,9 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
 
     def "start one task process with repositoryService deployment"() {
         given:
-            def deployment = repositoryService.createDeployment().addClasspathResource("org/crp/flowable/spock/examples/oneTask.bpmn20.xml").deploy()
+            String deploymentId = repositoryService.createDeployment().
+                    addClasspathResource("org/crp/flowable/spock/examples/oneTask.bpmn20.xml").
+                    deploy().getId()
         when:
             runtimeService.createProcessInstanceBuilder().
                 processDefinitionKey("oneTaskProcess").
@@ -20,7 +22,7 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
         then:
             assert runtimeService.createProcessInstanceQuery().count() == 1
         cleanup:
-            repositoryService.deleteDeployment(deployment.id, true)
+            repositoryService.deleteDeployment(deploymentId, true)
     }
 
     @Deployment(resources = ["org/crp/flowable/spock/examples/oneTask.bpmn20.xml"])
