@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+        xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+        targetNamespace="test" xmlns:flowable="http://flowable.org/bpmn">
+
+  <process id="userTaskWithScriptListenerProcess">
+    <startEvent id="theStart" />
+    <sequenceFlow id="flow1" sourceRef="theStart" targetRef="userTask" />
+    <userTask id="userTask">
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.flowable.engine.impl.bpmn.listener.ScriptTaskListener" >
+          <flowable:field name="script">
+            <flowable:string>
+              task.newVariable = task.inputVariable
+            </flowable:string>
+          </flowable:field>
+          <flowable:field name="language" stringValue="groovy" />
+        </flowable:taskListener>
+      </extensionElements>    </userTask>
+    <sequenceFlow id="flow2" sourceRef="userTask" targetRef="theEnd" />
+    <endEvent id="theEnd" />
+  </process>
+
+</definitions>
