@@ -3,16 +3,14 @@ package org.crp.flowable.spock.examples
 import org.crp.flowable.spock.Deployment
 import org.crp.flowable.spock.PluggableFlowableSpecification
 import org.flowable.bpmn.model.ReceiveTask
-import org.flowable.engine.runtime.ProcessInstance
 
-import static org.assertj.core.api.Assertions.assertThat
 import static org.crp.flowable.spock.util.ProcessModelBuilder.*
 
 class OneTaskProcessSpec extends PluggableFlowableSpecification {
 
     def "start one task process with repositoryService deployment"() {
         given:
-            String deploymentId = repositoryService.createDeployment().
+            def deploymentId = repositoryService.createDeployment().
                     addClasspathResource("org/crp/flowable/spock/examples/oneTask.bpmn20.xml").
                     deploy().getId()
         when:
@@ -20,7 +18,7 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
                 processDefinitionKey("oneTaskProcess").
                 start()
         then:
-            assert runtimeService.createProcessInstanceQuery().count() == 1
+            runtimeService.createProcessInstanceQuery().count() == 1
         cleanup:
             repositoryService.deleteDeployment(deploymentId, true)
     }
@@ -32,7 +30,7 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
                 processDefinitionKey("oneTaskProcess").
                 start()
         then:
-            assert runtimeService.createProcessInstanceQuery().count() == 1
+            runtimeService.createProcessInstanceQuery().count() == 1
     }
 
     def "start one task process with given deployment"() {
@@ -43,7 +41,7 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
                 processDefinitionKey("oneTaskProcess").
                 start()
         then:
-            assert runtimeService.createProcessInstanceQuery().count() == 1
+            runtimeService.createProcessInstanceQuery().count() == 1
     }
 
     def 'create one task process with builder'() {
@@ -54,7 +52,7 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
                 processDefinitionKey("oneTaskProcess").
                 start()
         then:
-            assert runtimeService.createProcessInstanceQuery().count() == 1
+            runtimeService.createProcessInstanceQuery().count() == 1
     }
 
     @Newify(ReceiveTask)
@@ -69,13 +67,13 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
             ) >> ReceiveTask(id:'receiveTask') >> endEvent()
 
         when:
-            ProcessInstance pi = runtimeService.createProcessInstanceBuilder().
+            def pi = runtimeService.createProcessInstanceBuilder().
                 processDefinitionKey("scriptTaskProcess").
                 start()
 
         then:
-            assert runtimeService.hasVariable(pi.getId(), 'newVariable')
-            assertThat runtimeService.getVariable(pi.getId(), 'newVariable') isEqualTo 'newVariableValue'
+            runtimeService.hasVariable(pi.id, 'newVariable')
+            runtimeService.getVariable(pi.id, 'newVariable') == 'newVariableValue'
     }
 
     @Newify(ReceiveTask)
@@ -86,13 +84,13 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
             ) >> ReceiveTask(id:'receiveTask') >> endEvent()
 
         when:
-            ProcessInstance pi = runtimeService.createProcessInstanceBuilder().
+            def pi = runtimeService.createProcessInstanceBuilder().
                 processDefinitionKey("scriptTaskProcess").
                 start()
 
         then:
-            assert runtimeService.hasVariable(pi.getId(), 'newVariable')
-            assertThat runtimeService.getVariable(pi.getId(), 'newVariable') isEqualTo 'newVariableValue'
+            runtimeService.hasVariable(pi.id, 'newVariable')
+            runtimeService.getVariable(pi.id, 'newVariable') == 'newVariableValue'
 
         where:
         script = [
@@ -110,14 +108,14 @@ class OneTaskProcessSpec extends PluggableFlowableSpecification {
             ) >> ReceiveTask(id:'receiveTask') >> endEvent()
 
         when:
-            ProcessInstance pi = runtimeService.createProcessInstanceBuilder().
+            def pi = runtimeService.createProcessInstanceBuilder().
                 processDefinitionKey("scriptTaskProcess").
                 variables(['inputVariable':'inputVariableValue']).
                 start()
 
         then:
-            assert runtimeService.hasVariable(pi.getId(), 'newVariable')
-            assertThat runtimeService.getVariable(pi.getId(), 'newVariable') isEqualTo 'inputVariableValue'
+            runtimeService.hasVariable(pi.getId(), 'newVariable')
+            runtimeService.getVariable(pi.getId(), 'newVariable') == 'inputVariableValue'
 
         where:
         script = [
