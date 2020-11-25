@@ -18,7 +18,7 @@
     <java.version>1.8</java.version>
 
     <flowable.version>6.5.0</flowable.version>
-    <groovy.version>2.5.8</groovy.version>
+    <groovy.version>3.0.0</groovy.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
     <hikari.version>3.4.2</hikari.version>
     <slf4j.version>1.7.30</slf4j.version>
@@ -120,7 +120,7 @@
           visit https://github.com/groovy/GMavenPlus/wiki -->
           <groupId>org.codehaus.gmavenplus</groupId>
           <artifactId>gmavenplus-plugin</artifactId>
-          <version>1.6</version>
+          <version>1.11.0</version>
           <executions>
             <execution>
               <goals>
@@ -137,5 +137,6 @@
   <modules>
     <module>flowable-spock</module>
     <module>flowable-groovy</module>
+    <module>flowable-shell</module>
   </modules>
 </project>
