@@ -17,7 +17,7 @@ public class ConfigurationTest {
     @Test
     void setFullConfiguration() {
         assertThat((String) shell.evaluate(() -> "configure login password restUrl")).
-                isEqualTo("login@restUrl");
+                isEqualTo("login@restUrl/");
         assertThat((String) shell.evaluate(() -> "configure --password password --rest-url restUrlUpdate")).
                 isEqualTo("login@restUrlUpdate/");
         assertThat((String) shell.evaluate(() -> "configure admin test http://localhost:8080/flowable-ui/app-api/")).
