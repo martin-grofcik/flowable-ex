@@ -12,4 +12,12 @@ public class FlowableShellConfiguration {
         return new ObjectMapper();
     }
 
+    @Bean
+    org.flowable.ex.shell.utils.Configuration configuration() {
+        org.flowable.ex.shell.utils.Configuration configuration = new org.flowable.ex.shell.utils.Configuration();
+        configuration.setLogin("admin");
+        configuration.setPassword("test");
+        configuration.setRestURL("http://localhost:8080/flowable-ui/");
+        return configuration;
+    }
 }

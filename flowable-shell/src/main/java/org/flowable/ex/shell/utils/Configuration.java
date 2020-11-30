@@ -1,4 +1,4 @@
-package org.flowable.ex.shell;
+package org.flowable.ex.shell.utils;
 
 public class Configuration {
     private String login;
