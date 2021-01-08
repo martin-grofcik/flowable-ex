@@ -1,12 +1,13 @@
 package org.flowable.ex.shell;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.ParameterMissingResolutionException;
 import org.springframework.shell.Shell;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
+
+import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,20 +18,28 @@ public class DeployIT {
 
     @Test
     void deploy() {
-        assertThat((String) shell.evaluate(() -> "deploy src/test/resources/app.bar")).
-                contains("\"name\" : \"app\"");
+        assertThat(shell.evaluate(() -> "deploy src/test/resources/app.bar").toString()).
+                contains("\"name\":\"app\"");
+        assertThat(shell.evaluate(() -> "lsd app").toString()).
+                contains("\"size\":1");
+
+        deleteDeployment("app");
     }
 
     @Test
     void deployWithAppName() {
-        assertThat((String) shell.evaluate(() -> "deploy src/test/resources/app.bar --file-name testFileName.bar")).
-                contains("\"name\" : \"testFileName\"");
+        assertThat(shell.evaluate(() -> "deploy src/test/resources/app.bar --deployment-name testFileName.bar").toString()).
+                contains("\"name\":\"testFileName\"");
+
+        deleteDeployment("testFileName");
     }
 
     @Test
     void deployWithTenant() {
-        assertThat((String) shell.evaluate(() -> "deploy src/test/resources/app.bar --file-name app.bar --tenant-id testTenant")).
-                contains("\"tenantId\" : \"testTenant\"");
+        assertThat(shell.evaluate(() -> "deploy src/test/resources/app.bar --deployment-name app.bar --tenant-id testTenant").toString()).
+                contains("\"tenantId\":\"testTenant\"");
+
+        deleteDeployment("app");
     }
 
     @Test
@@ -39,4 +48,30 @@ public class DeployIT {
                 extracting(Throwable::getMessage).isEqualTo("Parameter '--path-to-application string' should be specified");
     }
 
+    @Test
+    void importExportApp() {
+        File outFile = new File("target/outputFile.zip");
+        try {
+            shell.evaluate(() -> "import --input-file-name src/test/resources/app.zip");
+
+            assertThat(shell.evaluate(() -> "list one").toString()).contains("\"name\":\"one\"");
+
+            shell.evaluate(() -> "export --name one --output-file-name target/outputFile.zip");
+
+            assertThat(outFile).exists();
+        } finally {
+            if (outFile.exists()) {
+                if (!outFile.delete()) {
+                    System.err.println("Unable to delete file");
+                }
+            }
+        }
+    }
+
+
+    private void deleteDeployment(String deploymentName) {
+        shell.evaluate(() -> "delete-deployments " + deploymentName);
+        assertThat(shell.evaluate(() -> "lsd "+ deploymentName).toString()).
+                contains("\"size\":0");
+    }
 }

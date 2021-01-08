@@ -1,8 +1,11 @@
 package org.flowable.ex.shell.configuration;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.flowable.ex.shell.utils.JsonNodeResultHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.shell.ResultHandler;
 
 @Configuration
 public class FlowableShellConfiguration {
@@ -19,5 +22,10 @@ public class FlowableShellConfiguration {
         configuration.setPassword("test");
         configuration.setRestURL("http://localhost:8080/flowable-ui/");
         return configuration;
+    }
+
+    @Bean
+    ResultHandler<JsonNode> jsonNodeResultHandler() {
+        return new JsonNodeResultHandler();
     }
 }
