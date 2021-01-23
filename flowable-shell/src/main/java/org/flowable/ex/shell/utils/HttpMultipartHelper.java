@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 public class HttpMultipartHelper {
 
-    public static HttpEntity getMultiPartEntity(String fileName, String contentType, InputStream fileStream, Map<String, String> additionalFormFields) throws IOException {
+    public static HttpEntity getMultiPartEntity(String name, String fileName, String contentType, InputStream fileStream, Map<String, String> additionalFormFields) throws IOException {
 
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
 
@@ -35,7 +35,7 @@ public class HttpMultipartHelper {
             }
         }
 
-        entityBuilder.addBinaryBody(fileName, IOUtils.toByteArray(fileStream), ContentType.create(contentType), fileName);
+        entityBuilder.addBinaryBody(name, IOUtils.toByteArray(fileStream), ContentType.create(contentType), fileName);
 
         return entityBuilder.build();
     }

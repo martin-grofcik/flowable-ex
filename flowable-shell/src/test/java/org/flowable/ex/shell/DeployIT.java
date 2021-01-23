@@ -54,9 +54,9 @@ public class DeployIT {
         try {
             shell.evaluate(() -> "import --input-file-name src/test/resources/app.zip");
 
-            assertThat(shell.evaluate(() -> "list one").toString()).contains("\"name\":\"one\"");
+            assertThat(shell.evaluate(() -> "list app").toString()).contains("\"name\":\"app\"");
 
-            shell.evaluate(() -> "export --name one --output-file-name target/outputFile.zip");
+            shell.evaluate(() -> "export --name app --output-file-name target/outputFile.zip");
 
             assertThat(outFile).exists();
         } finally {
@@ -65,9 +65,12 @@ public class DeployIT {
                     System.err.println("Unable to delete file");
                 }
             }
+            shell.evaluate(() -> "rm app");
+            assertThat(shell.evaluate(() -> "ls app").toString()).
+                    contains("\"size\":0");
+
         }
     }
-
 
     private void deleteDeployment(String deploymentName) {
         shell.evaluate(() -> "delete-deployments " + deploymentName);
