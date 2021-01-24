@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @ShellCommandGroup
@@ -30,14 +31,14 @@ import java.util.Map;
 public class Model extends RestCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Deployment.class);
 
-    private static final Map<String, String> MODEL_TYPES = Collections.unmodifiableMap(Map.of(
-            "bpmn", "0",
-            "form", "2",
-            "app", "3",
-            "decision-table", "4",
-            "cmmn", "5",
-            "decision-service", "6"
-    ));
+    private static final Map<String, String> MODEL_TYPES = Collections.unmodifiableMap(new HashMap<String, String>() {{
+        put("bpmn", "0");
+        put("form", "2");
+        put("app", "3");
+        put("decision-table", "4");
+        put("cmmn", "5");
+        put("decision-service", "6");
+    }});
 
     @ShellMethod("Export model from modeler to file.")
     public void export(@ShellOption(defaultValue = "app") String type,
