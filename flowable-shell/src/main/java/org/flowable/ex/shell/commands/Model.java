@@ -1,6 +1,7 @@
 package org.flowable.ex.shell.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -48,6 +49,14 @@ public class Model extends RestCommand {
         executeWithModelId(type, name, (client, modelId) -> saveModelToFile(client, modelId, outputFileName));
     }
 
+    @ShellMethod("Export deployable model from modeler to file.")
+    public void exportBar(@ShellOption(defaultValue = "app") String type,
+                       @ShellOption String name,
+                       @ShellOption(defaultValue = "") String tenantId,
+                       @ShellOption String outputFileName) {
+        executeWithModelId(type, name, (client, modelId) -> saveModelToBarFile(client, modelId, outputFileName));
+    }
+
     @ShellMethod(value = "Delete model from modeler.", key = {"rm", "delete-model"})
     public JsonNode deleteModel(String name,
                             @ShellOption(defaultValue = "app") String type,
@@ -68,10 +77,18 @@ public class Model extends RestCommand {
     }
 
     protected JsonNode saveModelToFile(CloseableHttpClient client, String modelId, String outputFileName) {
+        return saveModelFromUrlToFile(client, "modeler-app/rest/app-definitions/" + modelId + "/export", outputFileName);
+    }
+
+    protected JsonNode saveModelToBarFile(CloseableHttpClient client, String modelId, String outputFileName) {
+        return saveModelFromUrlToFile(client, "modeler-app/rest/app-definitions/" + modelId + "/export-bar", outputFileName);
+    }
+
+    protected ObjectNode saveModelFromUrlToFile(CloseableHttpClient client, String url, String outputFileName) {
         try {
-            URIBuilder uriBuilder = new URIBuilder(configuration.getRestURL() + "modeler-app/rest/app-definitions/" + modelId + "/export");
+            URIBuilder uriBuilder = new URIBuilder(configuration.getRestURL() + url);
             HttpGet httpGet = new HttpGet(uriBuilder.build());
-            LOGGER.info("Getting model id {} to file {}.", modelId, outputFileName);
+            LOGGER.info("Getting model from url {} to file {}.", uriBuilder.getPath(), outputFileName);
             CloseableHttpResponse response = executeBinaryRequest(client, httpGet, false);
 
             try {

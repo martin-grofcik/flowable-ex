@@ -14,8 +14,11 @@ import org.springframework.shell.standard.ShellOption;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.util.Enumeration;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 @ShellCommandGroup("Utils")
@@ -45,7 +48,7 @@ public class Utils {
 
     @ShellMethod("Zip directory to file.")
     public static void zip(@ShellOption String sourceDirectory, @ShellOption String targetFileName) throws IOException {
-        try(ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(targetFileName))) {
+        try (ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(targetFileName))) {
             compressDirectoryToZipfile(sourceDirectory, sourceDirectory, zipFile);
         }
     }
@@ -56,9 +59,9 @@ public class Utils {
         if (!targetDirectory.exists()) {
             createDirs(targetDirectory);
         }
-        try (ZipArchiveInputStream zis = new ZipArchiveInputStream(new FileInputStream(zipFile))) {
-            ZipArchiveEntry entry;
-            while ((entry = zis.getNextZipEntry()) != null) {
+        try(ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
                 File entryDestination = new File(targetDirectoryName, entry.getName());
                 if (!entryDestination.getCanonicalPath().startsWith(targetDirectory.getCanonicalPath() + File.separator)) {
                     throw new IllegalAccessException("Entry is outside of the target dir: " + entry.getName());
@@ -71,7 +74,6 @@ public class Utils {
                         IOUtils.copy(zis, out);
                     }
                 }
-
             }
         }
     }
