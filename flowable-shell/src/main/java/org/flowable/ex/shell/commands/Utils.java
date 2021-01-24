@@ -64,9 +64,9 @@ public class Utils {
                     throw new IllegalAccessException("Entry is outside of the target dir: " + entry.getName());
                 }
                 if (entry.isDirectory()) {
-                    createDirs(entryDestination);
+                    entryDestination.mkdirs();
                 } else {
-                    createDirs(entryDestination);
+                    entryDestination.getParentFile().mkdirs();
                     try (OutputStream out = new FileOutputStream(entryDestination)) {
                         IOUtils.copy(zis, out);
                     }
@@ -90,7 +90,7 @@ public class Utils {
                 ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + file.getName());
                 out.putNextEntry(entry);
 
-                try (FileInputStream in = new FileInputStream(sourceDir + file.getName())) {
+                try (FileInputStream in = new FileInputStream(sourceDir + File.separator + file.getName())) {
                     IOUtils.copy(in, out);
                 }
             }
