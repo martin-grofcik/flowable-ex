@@ -4,7 +4,7 @@
 
   <groupId>org.flowable.ex</groupId>
   <artifactId>flowable-ex</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>flowable-ex</name>
@@ -19,7 +19,7 @@
 
     <flowable.version>6.5.0</flowable.version>
     <groovy.version>3.0.0</groovy.version>
-    <junit.jupiter.version>5.5.2</junit.jupiter.version>
+    <junit.jupiter.version>5.7.0</junit.jupiter.version>
     <hikari.version>3.4.2</hikari.version>
     <slf4j.version>1.7.30</slf4j.version>
   </properties>
@@ -37,6 +37,12 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
       <version>${junit.jupiter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
@@ -84,7 +90,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M4</version>
+          <version>3.0.0-M5</version>
           <configuration>
             <useFile>false</useFile>
             <includes>
@@ -138,5 +144,6 @@
     <module>flowable-spock</module>
     <module>flowable-groovy</module>
     <module>flowable-shell</module>
+    <module>flowable-maven-plugin</module>
   </modules>
 </project>

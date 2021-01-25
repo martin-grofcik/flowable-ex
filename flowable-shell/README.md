@@ -1,5 +1,6 @@
 # flowable-shell
 
+Shell application to manipulate Flowable objects. 
 ## Build
 ```
 mvnw install -DskipTests=true
@@ -12,13 +13,6 @@ java -jar target/flowable-shell-1.0.0-SNAPSHOT.jar
 ```shell script
 shell:>help
 AVAILABLE COMMANDS
-
-Built-In Commands
-        clear: Clear the shell screen.
-        exit, quit: Exit the shell.
-        help: Display help about available commands.
-        script: Read and execute commands from a file.
-        stacktrace: Display the full stacktrace of the last error.
 
 Deployment
         delete-deployments, rmd: Delete all deployments with given name, tenantId from runtime. WARNING - use only for testing purposes
