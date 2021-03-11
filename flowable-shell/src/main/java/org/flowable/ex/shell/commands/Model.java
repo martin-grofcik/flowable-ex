@@ -141,7 +141,7 @@ public class Model extends RestCommand {
             int modelsSize = responseNode.get("size").asInt();
             if (modelsSize > 1) {
                 LOGGER.error("Ambiguous model name {} of type {}.", name, type);
-                throw new RuntimeException("More than one model " + name + "returned [" + modelsSize + "]");
+                throw new RuntimeException("More than one model '" + name + "' returned [" + modelsSize + "]");
             }
             if (modelsSize == 0) {
                 LOGGER.error("No model found name {} of type {}.", name, type);
