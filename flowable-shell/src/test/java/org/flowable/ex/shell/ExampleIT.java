@@ -28,11 +28,20 @@ public class ExampleIT {
         shell.evaluate(() -> "zip target/test/app target/test/app-out.bar");
         shell.evaluate(() -> "deploy target/test/app-out.bar");
 
-        assertThat(shell.evaluate(() -> "lsd app-out").toString()).
-                contains("\"size\":1");
-
+        //clean up
         shell.evaluate(() -> "rmd app-out");
+
+        assertThat(shell.evaluate(() -> "ls app").toString()).
+                contains("\"size\":1");
         shell.evaluate(() -> "rm app");
+        assertThat(shell.evaluate(() -> "ls app").toString()).
+                contains("\"size\":0");
+
+        assertThat(shell.evaluate(() -> "ls oneTaskProcess bpmn").toString()).
+                contains("\"size\":1");
+        shell.evaluate(() -> "rm oneTaskProcess bpmn");
+        assertThat(shell.evaluate(() -> "ls oneTaskProcess bpmn").toString()).
+                contains("\"size\":0");
         FileUtils.deleteDirectory(new File("target/test"));
     }
 

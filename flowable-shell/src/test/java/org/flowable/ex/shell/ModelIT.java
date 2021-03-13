@@ -36,6 +36,10 @@ public class ModelIT {
             assertThat(shell.evaluate(() -> "ls app").toString()).
                     contains("\"size\":0");
 
+            shell.evaluate(() -> "rm oneTaskProcess bpmn");
+            assertThat(shell.evaluate(() -> "ls oneTaskProcess bpmn").toString()).
+                    contains("\"size\":0");
+
         }
     }
 }

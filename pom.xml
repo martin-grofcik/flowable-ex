@@ -144,6 +144,5 @@
     <module>flowable-spock</module>
     <module>flowable-groovy</module>
     <module>flowable-shell</module>
-    <module>flowable-maven-plugin</module>
   </modules>
 </project>
